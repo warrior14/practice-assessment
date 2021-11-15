@@ -1,0 +1,4 @@
+0 -> sunny
+1 - 50 -> sunny s cloudy
+51 - 80 -> partly cloudy
+81 - 100 -> cloudy 

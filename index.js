@@ -17,13 +17,21 @@ let getDataFromApi = new Promise((resolve, reject) => {
 });
 
 
-let createElement = (tag, attribute1, value1, attribute2, value2, text, parentElement) => {
+let createElement = (tag, attribute1, attributeValue1, attribute2, attributeValue2, text, parentElement) => {
+    if (attribute2 === "") {
+        let newElement = document.createElement(tag);
+        newElement.setAttribute(attribute1, attributeValue1);
+        newElement.innerText = `${text}`;
+        parentElement.append(newElement);
+        return newElement;
+    } else {
     let newElement = document.createElement(tag);
-    newElement.setAttribute(attribute1, value1);
-    newElement.setAttribute(attribute2, value2);
+    newElement.setAttribute(attribute1, attributeValue1);
+    newElement.setAttribute(attribute2, attributeValue2);
     newElement.innerText = `${text}`;
     parentElement.append(newElement);
     return newElement;
+    }
 }
 
 
@@ -33,7 +41,8 @@ let createForecastDisplay = (img, min, max) => {
   let divElement = createElement("div", "id", "forecastContainer", "", "", "", weather);
   createElement("img", "src", img, "", "", "", divElement);
   //createElement("p", "id", "pId", min, max, divElement);
-  createElement("p", "min", min, "max", max, "", divElement);
+  createElement("p", "id", "minTemp", "", "", min, divElement);
+  createElement("p", "id", "maxTemp", "", "",  max, divElement);
 };
 
 
@@ -54,7 +63,7 @@ console.log('data inside', data)
 //         return day.temp.max})
 // );
 
-createForecastDisplay("images/cloudy.png", data.daily.temp.min, data.daily.temp.max);
+// createForecastDisplay("images/cloudy.png", data.daily.temp.min, data.daily.temp.max);
 
 
 // map, filter and find returns you something, map = select, filter = where, find = FirstOrDefault 
@@ -74,6 +83,7 @@ data.daily.forEach(day => {
         cloudImage = "images/cloudy.png"
     }
     //createForecastDisplay(cloudImage, day.temp.max)
+    console.log('temp', day.temp.min, day.temp.max);
     createForecastDisplay(cloudImage, day.temp.min, day.temp.max)
 });
 

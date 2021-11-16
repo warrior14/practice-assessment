@@ -1,0 +1,11 @@
+#weather {
+    display: flex;
+    justify-content: space-evenly;
+
+
+}
+
+#forecastContainer {
+    border: 1px solid black;
+    padding: 2em;
+}

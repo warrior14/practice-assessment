@@ -25,22 +25,22 @@ let createElement = (tag, attribute1, attributeValue1, attribute2, attributeValu
         parentElement.append(newElement);
         return newElement;
     } else {
-    let newElement = document.createElement(tag);
-    newElement.setAttribute(attribute1, attributeValue1);
-    newElement.setAttribute(attribute2, attributeValue2);
-    newElement.innerText = `${text}`;
-    parentElement.append(newElement);
-    return newElement;
+        let newElement = document.createElement(tag);
+        newElement.setAttribute(attribute1, attributeValue1);
+        newElement.setAttribute(attribute2, attributeValue2);
+        newElement.innerText = `${text}`;
+        parentElement.append(newElement);
+        return newElement;
     }
 }
 
 
 // this is  a method that creates that builds the forecast display of each temp and image, this method is what invokes the createElement, this
 // where Im building, and the parameters are being passed corresspondingly
-let createForecastDisplay = (img, min, max) => {
+let createForecastDisplay = (img, min, max, dayName) => {
   let divElement = createElement("div", "id", "forecastContainer", "", "", "", weather);
+  createElement("p", "id", "datyName", "", "", dayName, divElement);
   createElement("img", "src", img, "", "", "", divElement);
-  //createElement("p", "id", "pId", min, max, divElement);
   createElement("p", "id", "minTemp", "", "", min, divElement);
   createElement("p", "id", "maxTemp", "", "",  max, divElement);
 };
@@ -48,22 +48,31 @@ let createForecastDisplay = (img, min, max) => {
 
 
 
+let roundNumber = (tempNumber) => {
+    let roundedNumber = Math.round(tempNumber);
+    return `${roundedNumber}°`;
+}
+
+
+// this method will multiply the dt's value by 1,000 and the output is still an integer, because we want to convert utc time to standard time
+let convertDtFromUtcToStandard = (dt) => {
+    return dt * 1000
+}
+// this method recieves the multiplied outcome of the dt's value by 1000, then uses that number in the date/toLocaleString to convert the 
+// integer into a string ex: "Monday"
+let getDate = (dateCode) => {
+    let date = new Date(dateCode).toLocaleString('en-US', {
+        weekday: 'long'
+    });
+    return date;
+}
+
 getDataFromApi.then(data => {
 
 
 // this gurantees that this will render before anything else
 
 console.log('data inside', data)
-
-// createForecastDisplay("images/cloudy.png", data.daily.temp.min, data.daily.temp.min);
-// createForecastDisplay("images/cloudy.png", data.daily.forEach(day => {
-//     return day.temp.min
-//     }), 
-//     data.daily.forEach(day => {
-//         return day.temp.max})
-// );
-
-// createForecastDisplay("images/cloudy.png", data.daily.temp.min, data.daily.temp.max);
 
 
 // map, filter and find returns you something, map = select, filter = where, find = FirstOrDefault 
@@ -84,7 +93,16 @@ data.daily.forEach(day => {
     }
     //createForecastDisplay(cloudImage, day.temp.max)
     console.log('temp', day.temp.min, day.temp.max);
-    createForecastDisplay(cloudImage, day.temp.min, day.temp.max)
+
+    let convertedDayCode = convertDtFromUtcToStandard(day.dt);
+
+    let weekdayString = getDate(convertedDayCode);
+
+    let roundedTempNumberMin = roundNumber(day.temp.min);
+
+    let roundedTempNumberMax = roundNumber(day.temp.max);
+
+    createForecastDisplay(cloudImage, roundedTempNumberMin, roundedTempNumberMax, weekdayString);
 });
 
 

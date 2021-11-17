@@ -35,7 +35,7 @@ let createElement = (tag, attribute1, attributeValue1, attribute2, attributeValu
 }
 
 
-// this is  a method that creates that builds the forecast display of each temp and image, this method is what invokes the createElement, this
+// this is  a method is what builds the forecast display of each temp and image, this method is what invokes the createElement, this
 // where Im building, and the parameters are being passed corresspondingly
 let createForecastDisplay = (img, min, max, dayName) => {
   let divElement = createElement("div", "id", "forecastContainer", "", "", "", weather);
@@ -47,7 +47,7 @@ let createForecastDisplay = (img, min, max, dayName) => {
 
 
 
-
+// this method takes in the min or max temp number and rounds it with the Math.round method
 let roundNumber = (tempNumber) => {
     let roundedNumber = Math.round(tempNumber);
     return `${roundedNumber}°`;
